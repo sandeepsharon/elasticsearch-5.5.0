@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic-deployment-app
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: elastic-deployment-app
+        type: kki
+        version: v0.1
+    spec:
+      containers:
+        - name: elastic-deployment-app
+          image: sraeik/elasticsearch5.5.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9200
+              protocol: TCP
+          env:
+            - name: DEMO_ENV
+              value: staging
+      restartPolicy: Always
+      
+      ---
+      
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 9200
+      port: 9200
+      nodePort: 30004
+  selector:
+    app: elastic-deployment-app
+    type: kki
