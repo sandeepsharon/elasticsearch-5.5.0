@@ -1,4 +1,5 @@
 FROM centos:7
+LABEL maintainer="sandeepsharon@gmail.com"
 RUN yum -y update 
 RUN useradd -ms /bin/bash elastic
 #RUN groupadd -r elastic && useradd -m -g elastic elastic
